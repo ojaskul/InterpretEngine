@@ -68,6 +68,21 @@ namespace interpret {
                 y *= otherVec.y;
                 z *= otherVec.z;
             }
+            cartesian dotProduct(const Vector3d &otherVec) {
+                return x*otherVec.x + y*otherVec.y + z*otherVec.z;
+            }
+            Vector3d crossProduct(const Vector3d &otherVec) {
+                return Vector3d(y*otherVec.z - z*otherVec.y, z*otherVec.x - x*otherVec.z, x*otherVec.y - y*otherVec.x);
+            }
+            void makeOrthonormalVector(Vector3d *a, Vector3d *b, Vector3d *c) {
+                a->normalize();
+                (*c) = (*a) % (*b);
+                if (c->magSqaured() == 0.0) {
+                    return;
+                }
+                c->normalize();
+                (*b) = (*c) % (*a);
+            }
             /**
              * Overloaded operation to multiply each component of this vector by a scalar val.
              * */
@@ -81,6 +96,9 @@ namespace interpret {
              * */
             Vector3d operator * (const cartesian val) {
                 return Vector3d(x*val, y*val, z*val);
+            }
+            cartesian operator * (const Vector3d &otherVec) {
+                return x*otherVec.x + y*otherVec.y + z*otherVec.z;
             }
             /**
              * Overloaded operation to add each component of this vector to another vector.
@@ -110,6 +128,11 @@ namespace interpret {
             Vector3d operator - (const Vector3d& otherVec) {
                 return Vector3d(x - otherVec.x, y - otherVec.y, z - otherVec.z);
             }
-        // private:
+            void operator %= (const Vector3d &otherVec) {
+                (*this) = crossProduct(otherVec);
+            }
+            Vector3d operator % (const Vector3d &otherVec) {
+                return Vector3d(y*otherVec.z - z*otherVec.y, z*otherVec.x - x*otherVec.z, x*otherVec.y - y*otherVec.x);
+            }
     };
 };
