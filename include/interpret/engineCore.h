@@ -1,5 +1,6 @@
 #include "precision.h"
-#include <math.h>
+#include "math.h"
+
 namespace interpret {
     class Vector3d {
         public:
