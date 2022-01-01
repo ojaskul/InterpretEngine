@@ -84,6 +84,9 @@ namespace interpret {
                 c->normalize();
                 (*b) = (*c) % (*a);
             }
+            void clear() {
+                x = y = z = 0;
+            }
             /**
              * Overloaded operation to multiply each component of this vector by a scalar val.
              * */
