@@ -19,4 +19,17 @@ namespace interpret {
             void clearRegistry();
             void updateForces(cartesian timeInterval);
     };
+    class ParticleGravity : public ParticleForceGenerator {
+        Vector3d gravity;
+        public:
+            ParticleGravity(const Vector3d &gravity);
+            virtual void updateForce(Particle *particle, cartesian timeInterval);
+    };
+    class ParticleDrag : public ParticleForceGenerator {
+        cartesian dc1;
+        cartesian dc2;
+        public:
+            ParticleDrag(cartesian dc1, cartesian dc2);
+            virtual void updateForce(Particle *particle, cartesian timeInterval);
+    };
 };

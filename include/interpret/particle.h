@@ -14,5 +14,8 @@ namespace interpret {
             void integrate(cartesian timeInterval);
             void clearAccumulator();
             void addForce(const Vector3d &newForce);
+            bool hasFiniteMass();
+            cartesian getMass();
+            void getVelocity(Vector3d *newforce) const;
     };
 };
