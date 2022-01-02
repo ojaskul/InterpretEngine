@@ -12,14 +12,14 @@ namespace interpret {
             cartesian inverseMass;
         public:
             void integrate(cartesian timeInterval);
-            
+
             void setMass(const cartesian mass);
             cartesian getMass() const;
 
             void setInverseMass(const cartesian inverseMass);
             cartesian getInverseMass() const;
 
-            bool hasFiniteMass();
+            bool hasFiniteMass() const;
 
             void setDamping(const cartesian damping);
             cartesian getDamping() const;
@@ -27,7 +27,7 @@ namespace interpret {
             void setPosition(const Vector3d &position);
             void setPosition(const cartesian x, const cartesian y, const cartesian z);
             void getPosition(Vector3d *position) const;
-            Vector3d getPosition();
+            Vector3d getPosition() const;
 
             void setVelocity(const Vector3d &velocity);
             void setVelocity(const cartesian x, const cartesian y, const cartesian z);
