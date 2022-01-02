@@ -12,10 +12,34 @@ namespace interpret {
             cartesian inverseMass;
         public:
             void integrate(cartesian timeInterval);
-            void clearAccumulator();
-            void addForce(const Vector3d &newForce);
+            
+            void setMass(const cartesian mass);
+            cartesian getMass() const;
+
+            void setInverseMass(const cartesian inverseMass);
+            cartesian getInverseMass() const;
+
             bool hasFiniteMass();
-            cartesian getMass();
-            void getVelocity(Vector3d *newforce) const;
+
+            void setDamping(const cartesian damping);
+            cartesian getDamping() const;
+
+            void setPosition(const Vector3d &position);
+            void setPosition(const cartesian x, const cartesian y, const cartesian z);
+            void getPosition(Vector3d *position) const;
+            Vector3d getPosition();
+
+            void setVelocity(const Vector3d &velocity);
+            void setVelocity(const cartesian x, const cartesian y, const cartesian z);
+            void getVelocity(Vector3d *velocity) const;
+            Vector3d getVelocity() const;
+
+            void setAccel(const Vector3d &accel);
+            void setAccel(const cartesian x, const cartesian y, const cartesian z);
+            void getAccel(Vector3d *accel) const;
+            Vector3d getAccel() const;
+
+            void addForce(const Vector3d &newForce);
+            void clearAccumulator();
     };
 };

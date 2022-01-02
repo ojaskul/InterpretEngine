@@ -32,4 +32,12 @@ namespace interpret {
             ParticleDrag(cartesian dc1, cartesian dc2);
             virtual void updateForce(Particle *particle, cartesian timeInterval);
     };
+    class ParticleSpring : public ParticleForceGenerator {
+        Particle *otherEnd;
+        cartesian springConstant;
+        cartesian restLength;
+        public:
+            ParticleSpring(Particle *particle, cartesian springConstant, cartesian restLength);
+            virtual void updateForce(Particle *particle, cartesian timeInterval);
+    };
 };

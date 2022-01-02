@@ -24,3 +24,16 @@ void ParticleDrag::updateForce(Particle *particle, cartesian timeInterval) {
     force *= -totalDrag;
     particle->addForce(force);
 }
+void ParticleSpring::updateForce(Particle *particle, cartesian timeInterval) {
+    Vector3d force;
+    particle->getPosition(&force);
+    force -= otherEnd->getPosition();
+
+    cartesian magnitude = force.magitude();
+    magnitude = cartesian_abs(magnitude - restLength);
+    magnitude *= springConstant;
+
+    force.normalize();
+    force *= -magnitude;
+    particle->addForce(force);
+}
