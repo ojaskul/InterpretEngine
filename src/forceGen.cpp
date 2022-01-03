@@ -37,3 +37,45 @@ void ParticleSpring::updateForce(Particle *particle, cartesian timeInterval) {
     force *= -magnitude;
     particle->addForce(force);
 }
+void ParticleAnchoredSpring::updateForce(Particle *particle, cartesian timeInterval) {
+    Vector3d force;
+    particle->getPosition(&force);
+    force -= *anchorLocation;
+
+    cartesian magnitude = force.magitude();
+    magnitude = (restLength - magnitude) * springConstant;
+
+    force.normalize();
+    force *= -magnitude;
+    particle->addForce(force);
+}
+void ParticleBungee::updateForce(Particle *particle, cartesian timeInterval) {
+    Vector3d force;
+    particle->getPosition(&force);
+    force -= otherParticle->getPosition();
+
+    cartesian magnitude = force.magitude();
+
+    if (magnitude <= restLength) return;
+
+    magnitude = (restLength - magnitude) * springConstant;
+
+    force.normalize();
+    force *= -magnitude;
+    particle->addForce(force);
+}
+void ParticleBuoyancy::updateForce(Particle *particle, cartesian timeInterval) {
+    cartesian depth = particle->getPosition().y;
+    if (depth >= maxDepth + waterHeight) {
+        return;
+    }
+    Vector3d force(0,0,0);
+
+    if (depth < waterHeight - maxDepth) {
+        force.y = density * volume;
+        particle->addForce(force);
+        return;
+    }
+    force.y = density * volume * (depth - maxDepth - waterHeight) / 2 * maxDepth;
+    particle->addForce(force);
+}
