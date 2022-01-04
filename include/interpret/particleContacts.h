@@ -23,4 +23,8 @@ namespace interpret {
             void setIterations(unsigned iterations);
             void resolveContacts(ParticleContact *contacts, unsigned numContacts, cartesian timeInterval);
     };
+    class ParticleContactGenerator {
+        public:
+            virtual unsigned addContact(ParticleContact *contact, unsigned limit) const = 0;
+    };
 };
