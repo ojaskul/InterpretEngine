@@ -3,6 +3,7 @@ using namespace interpret;
 
 unsigned ParticleWorld::generateContacts() {
     unsigned limit = maxContacts;
+
     ParticleContact *nextContact = contacts;
 
     for (ContactGenerators::iterator g = contactGenerators.begin(); g != contactGenerators.end(); g++) {

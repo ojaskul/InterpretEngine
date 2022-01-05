@@ -139,4 +139,106 @@ namespace interpret {
                 return Vector3d(y*otherVec.z - z*otherVec.y, z*otherVec.x - x*otherVec.z, x*otherVec.y - y*otherVec.x);
             }
     };
+    class Matrix3 {
+        public:
+            cartesian data[9];
+        public:
+            Matrix3 (cartesian c0, cartesian c1, cartesian c2, cartesian c3, cartesian c4, cartesian c5, cartesian c6, cartesian c7, cartesian c8) {
+                data[0] = c0;
+                data[1] = c1;
+                data[2] = c2;
+                data[3] = c3;
+                data[4] = c4;
+                data[5] = c5;
+                data[6] = c6;
+                data[7] = c7;
+                data[8] = c8;
+            }
+            Vector3d operator * (const Vector3d &vec) const {
+                return Vector3d(vec.x * data[0] + vec.y * data[1] + vec.z * data[2], vec.x * data[3] + vec.y * data[4] + vec.z * data[5], vec.x * data[6] + vec.y * data[7] + vec.z * data[8]);
+            }
+            Vector3d transform (const Vector3d &vec) const {
+                return (*this) * vec;
+            }
+            Matrix3 operator * (const Matrix3 &m) const {
+                return Matrix3(
+                    m.data[0]*data[0] + m.data[3]*data[1] + m.data[6]*data[2],
+                    m.data[1]*data[0] + m.data[4]*data[1] + m.data[7]*data[2],
+                    m.data[2]*data[0] + m.data[5]*data[1] + m.data[8]*data[2],
+
+                    m.data[0]*data[3] + m.data[3]*data[4] + m.data[6]*data[5],
+                    m.data[1]*data[3] + m.data[4]*data[4] + m.data[7]*data[5],
+                    m.data[2]*data[3] + m.data[5]*data[4] + m.data[8]*data[5],
+
+                    m.data[0]*data[6] + m.data[3]*data[7] + m.data[6]*data[8],
+                    m.data[1]*data[6] + m.data[4]*data[7] + m.data[7]*data[8],
+                    m.data[2]*data[6] + m.data[5]*data[7] + m.data[8]*data[8]
+                );
+            }
+            void operator *= (const Matrix3 &m) {
+                cartesian nd1;
+                cartesian nd2;
+                cartesian nd3;
+
+                nd1 = m.data[0]*data[0] + m.data[3]*data[1] + m.data[6]*data[2];
+                nd2 = m.data[1]*data[0] + m.data[4]*data[1] + m.data[7]*data[2];
+                nd3 = m.data[2]*data[0] + m.data[5]*data[1] + m.data[8]*data[2];
+
+                data[0] = nd1;
+                data[1] = nd2;
+                data[2] = nd3; 
+
+                nd1 = m.data[0]*data[3] + m.data[3]*data[4] + m.data[6]*data[5];
+                nd2 = m.data[1]*data[3] + m.data[4]*data[4] + m.data[7]*data[5];
+                nd3 = m.data[2]*data[3] + m.data[5]*data[4] + m.data[8]*data[5];
+
+                data[3] = nd1;
+                data[4] = nd2;
+                data[5] = nd3; 
+
+                nd1 = m.data[0]*data[6] + m.data[3]*data[7] + m.data[6]*data[8];
+                nd2 = m.data[1]*data[6] + m.data[4]*data[7] + m.data[7]*data[8];
+                nd3 = m.data[2]*data[6] + m.data[5]*data[7] + m.data[8]*data[8];
+
+                data[6] = nd1;
+                data[7] = nd2;
+                data[8] = nd3; 
+
+            }
+    };
+    class Matrix4 {
+        public:
+            cartesian data[12];
+        public:
+            Vector3d operator * (const Vector3d &vec) const {
+                return Vector3d(
+                    vec.x * data[0] + vec.y * data[1] + vec.z * data[2] + data[3], 
+                    vec.x * data[4] + vec.y * data[5] + vec.z * data[6] + data[7], 
+                    vec.x * data[8] + vec.y * data[9] + vec.z * data[10] + data[11]
+                );
+            }
+            Vector3d transform (const Vector3d &vec) const {
+                return (*this) * vec;
+            }
+            Matrix4 operator * (const Matrix4 &m) const {
+                Matrix4 matrix;
+                matrix.data[0] = m.data[0] * data[0] + m.data[4] * data[1] + m.data[8] * data[2];
+                matrix.data[4] = m.data[0] * data[4] + m.data[4] * data[5] + m.data[8] * data[6];
+                matrix.data[8] = m.data[0] * data[8] + m.data[4] * data[9] + m.data[8] * data[10];
+
+                matrix.data[1] = m.data[1] * data[0] + m.data[5] * data[1] + m.data[9] * data[2];
+                matrix.data[5] = m.data[1] * data[4] + m.data[5] * data[5] + m.data[9] * data[6];
+                matrix.data[9] = m.data[1] * data[8] + m.data[5] * data[9] + m.data[9] * data[10];
+
+                matrix.data[2] = m.data[2] * data[0] + m.data[6] * data[1] + m.data[10] * data[2];
+                matrix.data[6] = m.data[2] * data[4] + m.data[6] * data[5] + m.data[10] * data[6];
+                matrix.data[10] = m.data[2] * data[8] + m.data[6] * data[9] + m.data[10] * data[10];
+
+                matrix.data[3] = m.data[3] * data[0] + m.data[7] * data[1] + m.data[11] * data[2] + data[3];
+                matrix.data[7] = m.data[3] * data[4] + m.data[7] * data[5] + m.data[11] * data[6] + data[7];
+                matrix.data[11] = m.data[3] * data[8] + m.data[7] * data[9] + m.data[11] * data[10] + data[11];
+
+                return matrix;
+            }
+    };
 };
