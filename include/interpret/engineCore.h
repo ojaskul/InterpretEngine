@@ -361,6 +361,36 @@ namespace interpret {
                     intermed.z * data[10]
                     );
             }
+            Vector3d transformDirection(const Vector3d &vec) const {
+                return Vector3d(
+                    vec.x * data[0] +
+                    vec.y * data[1] +
+                    vec.z * data[2],
+
+                    vec.x * data[4] + 
+                    vec.y * data[5] +
+                    vec.z * data[6],
+
+                    vec.x * data[8] +
+                    vec.y * data[9] +
+                    vec.z * data[10]  
+                );
+            }
+            Vector3d transformInverseDirection(const Vector3d &vec) const {
+                return Vector3d(
+                    vec.x * data[0] +
+                    vec.y * data[4] +
+                    vec.z * data[8],
+
+                    vec.x * data[1] + 
+                    vec.y * data[5] +
+                    vec.z * data[9],
+
+                    vec.x * data[2] +
+                    vec.y * data[6] +
+                    vec.z * data[10]  
+                );
+            }
     };
 
     class Quaternion {
