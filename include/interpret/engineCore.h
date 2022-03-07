@@ -395,11 +395,54 @@ namespace interpret {
 
     class Quaternion {
         public:
-            cartesian r;
-            cartesian i;
-            cartesian j;
-            cartesian k;
+            union {
+                struct {
+                    cartesian r;
+                    cartesian i;
+                    cartesian j;
+                    cartesian k;
+                };
+                cartesian data[4];
+            };
         public:
             Quaternion(const cartesian r, const cartesian i, const cartesian j, const cartesian k) : r(r), i(i),j(j), k(k) {}
+
+            void normalize() {
+                cartesian d = r*r + i*i + j*j + k*k;
+
+                if (d == 0) {
+                    r = 1;
+                    return;
+                }
+
+                d = ((cartesian) 1.0)/cartesian_sqrt(d);
+                r *= d;
+                i *= d;
+                j *= d;
+                k *= d;
+            }
+
+            void operator *=(const Quaternion &qt) {
+                Quaternion m = *this;
+
+                r = m.r*qt.r - m.i*qt.i - m.j*qt.j - m.k*qt.k;
+                i = m.r*qt.i + m.i*qt.r + m.j*qt.k - m.k*qt.j;
+                j = m.r*qt.j + m.j*qt.r + m.k*qt.i - m.i*qt.k;
+                k = m.r*qt.k + m.k*qt.r + m.i*qt.j - m.j*qt.i;
+            }
+
+            void rotateByVector(const Vector3d& vec) {
+                Quaternion q(0, vec.x, vec.y, vec.z);
+                (*this) *= q;
+            }
+
+            void addScaledVector(const Vector3d& vec, cartesian scale) {
+                Quaternion q(0, vec.x, vec.y, vec.z);
+                q *= (*this);
+                r += q.r * ((cartesian)0.5);
+                i += q.i * ((cartesian)0.5);
+                j += q.j * ((cartesian)0.5);
+                k += q.k * ((cartesian)0.5);
+            }
     };
 };
